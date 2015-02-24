@@ -33,8 +33,9 @@ end
 
 action :enable do
   if @smbuser.disabled
+    pw = new_resource.password
     execute "Enable #{new_resource.name}" do
-      command "smbpasswd -e #{new_resource.name}"
+      command "echo '#{pw}\n#{pw}' | smbpasswd -s -e #{new_resource.name}"
     end
     new_resource.updated_by_last_action(true)
   end
