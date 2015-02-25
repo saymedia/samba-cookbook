@@ -50,6 +50,7 @@ if users
     next unless u['smbpasswd']
     samba_user u['id'] do
       password u['smbpasswd']
+      action [:delete]
       action [:create, :enable]
     end
   end
