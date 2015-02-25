@@ -21,6 +21,15 @@ require 'chef/mixin/shell_out'
 require 'chef/mixin/language'
 include Chef::Mixin::ShellOut
 
+action :delete_and_create do
+  pw = new_resource.password
+  execute "Delete and create #{new_resource.name}" do
+    command "smbpasswd -x #{new_resource.name}"
+    command "echo '#{pw}\n#{pw}' | smbpasswd -s -a #{new_resource.name}"
+  end
+  new_resource.updated_by_last_action(true)
+end
+
 action :create do
   unless @smbuser.exists
     pw = new_resource.password
